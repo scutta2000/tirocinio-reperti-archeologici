@@ -1,0 +1,150 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python38564bittirociniovenvvenv7dc1bb49cf0f4ae291f3162ba2cefd56",
+   "display_name": "Python 3.8.5 64-bit ('tirocinio-venv': venv)"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "source": [
+    "\n",
+    "# Obbiettivo\n",
+    "\n",
+    "Verificato che l'approccio NN funziona proviamo a stabilire i meta-parametri migliori\n",
+    "\n",
+    "# Risultato\n",
+    "\n",
+    "Dai test fatti i parametri ottimi sembrano essere  \n",
+    "* Activation = identity\n",
+    "* hidden_layer_size = 5  \n",
+    "* solver = adam  \n",
+    "\n",
+    "ottendendo un accuratezza del 97.3%\n",
+    "\n",
+    "(viene indicato learning rate = constant ma questo non ha effetto con il solver adam)\n",
+    "\n",
+    "\n",
+    "\n"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from get_data import ceramiche_DB\n",
+    "from sklearn.model_selection import GridSearchCV\n",
+    "from sklearn.neural_network import MLPClassifier"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X, y = ceramiche_DB()\n",
+    "nn = MLPClassifier(max_iter=500, random_state=42)\n",
+    "params = dict(\n",
+    "    hidden_layer_sizes  = list(range(2,100)),\n",
+    "    activation          = ['identity', 'logistic', 'tanh', 'relu'],\n",
+    "    solver              = ['sdg', 'adam'],\n",
+    "    learning_rate       = ['constant', 'invscaling']\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "clf = GridSearchCV(estimator=nn, param_grid=params, cv=5, scoring='accuracy', verbose = 2, n_jobs = -1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "stream",
+     "name": "stdout",
+     "text": [
+      "Fitting 5 folds for each of 1568 candidates, totalling 7840 fits\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Attenzione, ci mette molto a computare\n",
+    "grid_result = clf.fit(X, y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "(0.9727272727272727,\n",
+       " {'activation': 'identity',\n",
+       "  'hidden_layer_sizes': 5,\n",
+       "  'learning_rate': 'constant',\n",
+       "  'solver': 'adam'})"
+      ]
+     },
+     "metadata": {},
+     "execution_count": 34
+    }
+   ],
+   "source": [
+    "grid_result.best_score_, grid_result.best_params_"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "output_type": "execute_result",
+     "data": {
+      "text/plain": [
+       "array([[29,  3],\n",
+       "       [ 0, 81]])"
+      ]
+     },
+     "metadata": {},
+     "execution_count": 36
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "confusion_matrix(y, grid_result.predict(X))\n"
+   ]
+  }
+ ]
+}

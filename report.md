@@ -10,6 +10,8 @@
 
 * Test iniziale di learning non supervisionato per il dataset non classificato, risultati promettenti
 
+* Confronto con nested CV di vari tecniche di classificazione supervisionata, risultati buoni soprattuto per `naive bayes`
+
 
 
 

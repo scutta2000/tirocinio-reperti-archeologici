@@ -12,6 +12,8 @@
 
 * Confronto con nested CV di vari tecniche di classificazione supervisionata, risultati buoni soprattuto per `naive bayes`
 
+* test nn con 2 hidden layer, risultati sostanzialmente uguali
+
 
 
 

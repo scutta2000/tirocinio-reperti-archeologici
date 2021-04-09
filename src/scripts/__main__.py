@@ -1,1 +1,1 @@
-from .test_iniziale_NN import *
+from .get_data import *

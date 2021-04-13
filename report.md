@@ -14,7 +14,9 @@
 
 * test nn con 2 hidden layer, risultati sostanzialmente uguali
 
-* i modelli non supervisionati funzionano rimuovendo dal database le ripetizioni ma meno bene
+* i modelli non supervisionati funzionano rimuovendo dal database le ripetizioni ma meno bene (sia per accuratezza che sensibilità/)
+
+* valutazione della classificazione del database non classificato mostra una buona consitenza intra modello ma non buona inter modello
 
 
 

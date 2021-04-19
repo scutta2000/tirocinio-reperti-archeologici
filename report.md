@@ -18,6 +18,7 @@
 
 * valutazione della classificazione del database non classificato mostra una buona consitenza intra modello ma non buona inter modello
 
+* Il training senza ripetizioni mostra buoni risulati valutando con le ripetizioni ma non buone valutando con i singoli
 
 
 

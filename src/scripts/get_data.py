@@ -55,3 +55,10 @@ def da_classificare_DB():
     db = pd.read_excel(path, index_col=0, usecols=[
         0, 3, 4, 5, 6, 7, 8, 9, 10, 11])
     return db
+
+
+def unified_DB():
+    # Ritorna le X del database classificato + database non classificat
+    x1, _ = ceramiche_DB()
+    x2 = da_classificare_DB()
+    return pd.concat([x1, x2])

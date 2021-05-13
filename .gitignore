@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 tirocinio-venv/
+tirocinio3.7-venv/
 .vscode/
 __pycache__/
 

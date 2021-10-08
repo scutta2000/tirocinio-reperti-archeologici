@@ -99,12 +99,38 @@ asdjhgftry.
 \section{Descrizione}
 Il progetto consiste nel classificare un database di analisi di composizioni eseguite
 su dei reperti archeologici. La classificazione è stata eseguita in base all'origine
-geografica distinguendo i reperti originari di Tarquinia, luogo dove sono stati %TODO: controllare 
+geografica distinguendo i reperti originari di Tarquinia, luogo dove sono stati 
 ritrovati, da quelli di origine diversa. I classificatori sono per lo più 
 supervisionati e allenati su una porzione dei reperti di cui conoscevamo in partenza
 l'origine.
-\section{Cos'è il machine learning}
+
+\section{Cos'è il machine learning} %Vanno aggiunte le fonti
+Machine learning è un nome che include una varietà di algoritmi che, al contrario
+di algoritmi tradizionali, non specificano passo per passo come risolvere un
+certo problema ma migliorano gradualmente imparando da dati fino a risolvere 
+correttamente il problema. \\
+Questo approccio ha origini storiche già negli anni cinquanta, già Alan Turing 
+propone un'ipotetica macchina in grado di imparare e diventare intelligente. Negli 
+ultimi anni abbiamo visto realizzare il vero potenziale di questo approccio:
+con l'aumento esponenziale della potenza dei calcolatori e l'enorme quantità di dati
+oggi disponibili il machine learning è applicato a sempre più problemi, dai veicoli 
+autonomi, agli algoritmi per la selezione della pubblicità a microscopi in grado di 
+identificare cellule cancerogene.
+
 \section{Cosa sono i problemi di classificazioni}
+% I problemi di classificazione sono un insieme di problemi in cui dobbiamo dividere 
+% un insieme di oggetti in una serie di categorie.
+
+La classificazione è un sottoinsieme del machine learning, l'obbiettivo è costruire un 
+modello in grado di mappare un oggetto in ingresso con una categoria. I classificatori 
+si distinguono in due macro categorie quelli a apprendimento supervisionato e quelli a
+apprendimento non supervisionato: i primi imparano a classificare correttamente a 
+partire da un database di dati etichettati ovvero dove è specificata la categoria 
+corretta, nel secondo caso i dati di addestramento non hanno memorizzato le etichette.
+Evidentemente il secondo caso è più complesso sia per l'addestramento del modello sia 
+per misurare la sua correttezza. In questo progetto sono stati utilizzati principalmente
+algoritmi di apprendimento supervisionato.
+
 
 \chapter{Principali modelli per la classificazione}
 \section{Network neurali}
@@ -147,30 +173,10 @@ l'origine.
 \bibitem{gotti91}
 M. Gotti, I linguaggi specialistici, Firenze, La Nuova Italia, 1991.
 %
-\bibitem{wellek62}
-R. Wellek, A. Warren, Theory of Literature , 3rd edition, New York, Harcourt, 1962.
+\bibitem{kriesel07}
+D. Kriesel, A brief introduction to neural networks, available at http://www.dkriesel.com, 2007. %Seguendo "how to cite" sul sito
 %
-\bibitem{canziani78}
-A. Canziani et al., Come comunica il teatro: dal testo alla scena. Milano, Il Formichiere, 1978.
-%
-\bibitem{MoD67}
-Ministry of Defence, Great Britain, Author and Subject Catalogues of the Naval Library, London, Ministry of Defence, HMSO, 1967.
-%
-\bibitem{heine23}
-H. Heine, Pensieri e ghiribizzi. A cura di A. Meozzi. Lanciano, Carabba, 1923.
-%
-\bibitem{basso62}
-L. Basso, ``Capitalismo monopolistico e strategia operaia'', Problemi del socialismo, vol. 8, n. 5, pp. 585-612, 1962.
-%
-\bibitem{avirovic93}
-L. Avirovic, J. Dodds (a cura di), Atti del Convegno internazionale "Umberto Eco, Claudio Magris. Autori e traduttori a confronto" ( Trieste, 27-28 novembre 1989), Udine, Campanotto, 1993.
-%
-\bibitem{gans67}
-E.L. Gans, "The Discovery of Illusion: Flaubert's Early Works, 1835-1837", unpublished Ph.D. Dissertation, Johns Hopkins University, 1967.
-%
-\bibitem{harrison92}
-R. Harrison, Bibliography of planned languages (excluding Esperanto).  \url{http://www.vor.nu/langlab/bibliog.html}, 1992, agg. 1997.
-%
+
 \end{thebibliography}
 % 
 \end{document}

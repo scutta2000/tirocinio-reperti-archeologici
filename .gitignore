@@ -1,6 +1,5 @@
 .ipynb_checkpoints
-*/.ipynb_checkpoints/*
-tirocinio-venv/
+tirocinio-venv/;
 tirocinio/
 tirocinio3.7-venv/
 .vscode/

@@ -27,5 +27,5 @@ clf.fit(X_train, y_train)
 
 df = pd.DataFrame(confusion_matrix(y_test, clf.predict(X_test)))
 df = df.rename(index={0: 'actual 0', 1: 'actual 1'})
-df.to_latex('src/latex/test_iniziale.tex',
+df.to_latex('/latex/data/test_iniziale.tex',
             header=['predicted 0', 'predicted 1'])

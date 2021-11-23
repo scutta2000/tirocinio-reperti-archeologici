@@ -31,7 +31,11 @@
 \usepackage{setspace}
 \usepackage{tesi}
 
+% Aggiunti da me
 \hypersetup{hidelinks}
+\usepackage{subcaption}
+\usepackage{float}
+
 
 % per le accentate
 \usepackage[utf8]{inputenc}
@@ -74,13 +78,16 @@
 %			PREFAZIONE
 %
 \prefacesection{Prefazione}
-\section{Descrizione del problema} %TODO: Descrivere in più dettaglio
-Il progetto consiste nel classificare un database di analisi di composizione
-eseguite su dei reperti archeologici. La classificazione è stata eseguita in
-base all'origine geografica distinguendo i reperti originari di Tarquinia, luogo
-dove sono stati ritrovati, da quelli di origine diversa. I classificatori presi
-in considerazione sono per lo più supervisionati e allenati su una porzione dei
-reperti di cui conoscevamo in partenza l'origine.
+\section{Descrizione del problema}
+L'obbiettivo di questo progetto è riuscire a risalire all'origine geografica di
+alcuni reperti archeologici ritrovati nel sito della necropoli di cerveteri
+utilizzando tecniche di machine learning. Per ogni reperto archeologico sono
+state eseguite delle analisi di composizione producendo così un database su cui
+poter eseguire i diversi algoritmi utilizzati lavorando principalmente su un
+sottoinsieme di questi reperti di cui è nota la provenienza per poi applicare i
+modelli generati al database completo.
+
+
 %
 %
 %			ORGANIZZAZIONE
@@ -88,8 +95,9 @@ reperti di cui conoscevamo in partenza l'origine.
 \label{organizzazione}
 La tesi \`e organizzata come segue:
 \begin{itemize}
-	\item Nel capitolo 1 viene introdotto il progetto indicando lo scopo del
-lavoro e introducendo i concetti principali
+	\item Nel capitolo 1 viene introdotto il progetto introducendo i concetti
+	principali e gli algoritmi utilizzati.
+
 	\item Nel capitolo 2 
 
 \end{itemize}
@@ -105,158 +113,247 @@ asdjhgftry.
 \chapter{Algoritmi di machine learning e di classificazione}
 \label{cap1}
 
-\section{Che cos'è il machine learning} %aggiungere fonti
+\section{Che cos'è il machine learning}
 Machine learning è un nome che include una varietà di algoritmi che, al
 contrario di algoritmi tradizionali, non specificano passo per passo come
-risolvere un certo problema ma migliorano autonomamente gradualmente imparando
-da dati fino a risolvere correttamente il problema. 
+risolvere un certo problema ma autonomamente creano un modello del problema, in
+un processo detto allenamento, a partire da alcune istanze di questo. Otteniamo
+così un un modello ovvero una rappresentazione matematica semplificata del
+problema originale che usiamo per approssimare una soluzione per ogni istanza
+possibile del problema. 
 
-Questo approccio ha origini storiche negli anni cinquanta ma solo negli ultimi
-anni abbiamo visto realizzare il vero potenziale di questo approccio: con
-l'aumento esponenziale della potenza dei calcolatori e l'enorme quantità di dati
-oggi disponibili il machine learning è applicato a sempre più problemi, dai
-veicoli autonomi, agli algoritmi per la selezione della pubblicità a microscopi
-in grado di identificare cellule cancerogene.
+È quindi necessario avere una buona quantità di istanze ognuna composta da più
+valori, detti caratteristiche, che vengono tipicamente divise in due parti:
+l'insieme di training e l'insieme di di test. Il primo viene usato per
+l'allenamento del modello e il secondo per valutare le sue prestazioni, è
+importante che questi rimangano separati altrimenti il modello sarebbe
+facilitato da aver gia visto i dati durante l'allenamento e non potremmo
+valutare la prestazioni reali. 
 
-% training set
-
-
-
-%Possibile aggiunta: già Alan Turing  %A. M. TURING, I.—COMPUTING MACHINERY AND  INTELLIGENCE, Mind, Volume LIX, Issue 236, October 1950, Pages 433–460,
-% https://doi.org/10.1093/mind/LIX.236.433 propone un'ipotetica macchina in
-% grado di imparare e diventare intelligente
+Esistono due principali sottoinsiemi di algoritmi, quelli detti ad apprendimento
+supervisionato e quelli a apprendimento non supervisionato. Nel primo caso il
+training set è etichettato ovvero per ogni istanza è specificata la soluzione,
+detta etichetta, corrispondente, al contrario questa informazione non è presente
+per l'apprendimento non supervisionato. Il primo caso è tipicamente più semplice
+data l'informazione ulteriore disponibile e è anche quello principalmente
+utilizzato in questo progetto.
 
 \section{Cosa sono i problemi di classificazione}
 
-La classificazione è un sottoinsieme del machine learning, l'obbiettivo è
-costruire un modello in grado di mappare un oggetto in ingresso con una
-categoria. I classificatori si distinguono in due macro categorie quelli a
-apprendimento supervisionato e quelli a apprendimento non supervisionato: i
-primi imparano a classificare correttamente a partire da un database di dati
-etichettati ovvero dove è specificata la categoria corretta, nel secondo caso i
-dati di addestramento non hanno memorizzato le etichette. Evidentemente il
-secondo caso è più complesso sia per l'addestramento del modello sia per
-misurare la sua correttezza. In questo progetto sono stati utilizzati
-principalmente algoritmi di apprendimento supervisionato.
+I problemi di classificazione consistono nel produrre un algoritmo, detto
+classificatore, in grado associare a un istanza di input una o più categorie,
+come ad esempio una mail a "spam" o "non spam". Questo tipo di problema si presta
+molto alle tecniche di machine learning infatti spesso è difficile programmare
+manualmente stretti criteri per la classificazione ma è possibile lasciare al
+calcolatore questo compito fornendo solo una serie di esempi corretti da cui
+possa imparare.
 
+\section{Reti neurali}
 
-% \chapter{Principali modelli per la classificazione}
-\section{Network neurali}
+Le reti neurali sono una famiglia di modelli ispirati alle reti neuronali
+biologiche, sono composti da una serie di neuroni collegati fra loro. Questi
+neuroni in realtà non sono altro che una semplice funzione che moltiplica ogni
+input $o_i$ per un certo peso $w_i$, i risultati vengono sommati e usati come
+argomento di una funzione di attivazione $f$ che produce l'output del neurone:
 
-I network neurali si ispirano alle reti neuronali biologiche e sono composti da
-una serie di neuroni collegati fra loro. Questi neuroni in realtà non sono altro
-che una semplice funzione che prende una serie di valori input e li combina
-secondo una serie di parametri interni e restituisce un valore finale,
-tipicamente compreso tra zero e uno. 
+$$
+f(\sum_i o_i w_i)
+$$
 
-Il modo in cui i neuroni sono collegati è detto topologia e tipicamente è
-strutturata in diversi strati collegati fra loro. Il primo detto strato di input
-in cui abbiamo tanti neuroni quanti dati in ingresso al modello li elaborano
-secondo la loro funzione e inviano l'output a ogni neurone nello strato
+Spesso è utilizzata una funzione di attivazione che produce risultati compresi
+tra 0 e 1 in modo da uniformare gli input del neurone successivo, questo non è
+sempre il caso specialmente nell'ultimo strato di neuroni.
+
+Il modo in cui i neuroni sono collegati è detto topologia e nel caso utilizzato
+in questo progetto prende il nome di percettrone multistrato. In questa
+topologia i neuroni sono organizzati in diversi collegati fra loro in modo che
+l'output di ogni strato funge da input per il successivo. Il primo strato è
+detto strato di input nel quale abbiamo tanti neuroni quante le caratteristiche
+dei dati in ingresso al modello, ognuno di essi elabora una caratteristica
+secondo la propria funzione e invia l'output a ogni neurone dello strato
 successivo. In seguito abbiamo una serie di strati detti nascosti in cui a ogni
-livello i neuroni ricevono l'output di tutti i neuroni nell'livello precedente e
+livello i neuroni ricevono l'output di tutti i neuroni nel livello precedente e
 inviano il loro risultato a tutti i neuroni del livello successivo. L'ultimo
-livello sarà quello di output in cui i neuroni riceveranno l'output dall'ultimo 
-layer nascosto e restituiranno la soluzione. La dimensione del livello di output
-sarà determinata dalla soluzione desiderata, ad esempio in un problema di
-classificazione avremmo tipicamente tanti neuroni in uscita quante categorie
-possibili per la classificazione.
+livello è quello di output in cui i neuroni ricevono l'output dall'ultimo layer
+nascosto e restituiscono la soluzione. La dimensione del livello di output è
+determinata dalla soluzione desiderata, ad esempio in un problema di
+classificazione avremmo tanti neuroni in uscita quante categorie possibili per
+la classificazione.
 
-I parametri delle funzioni dei neuroni sono inizializzati con dei valori casuali e
-vengono perfezionati durante l'apprendimento che nel nostro caso sarà
-supervisionato: si utilizza un insieme di dati per l'addestramento confrontando
-l'output con l'etichetta del dato correggendo poi i valori dei parametri dei
-neuroni per farli avvicinare alla risposta corretta. Il processo viene ripetuto
-fino a che il modello smette di migliorare.
+\begin{figure}[h]
+	\includegraphics[width = 0.9\textwidth]{Immagini/MLP diagramma.png}
+	\captionof{figure}{Semplice rappresentazione di un percettrone multistrato con
+	due neuroni di input, tre in un singolo strato nascosto e due in output}
+\end{figure}
+\newpage
+
+I parametri delle funzioni dei neuroni sono inizializzati con dei valori casuali
+e vengono perfezionati durante l'apprendimento il quale, nel nostro caso, sarà
+supervisionato: a ogni step si confronta l'output del network con l'etichetta
+del dato correggendo poi i valori dei parametri dei neuroni per far avvicinare
+la risposta della rete a quella corretta. Il processo viene ripetuto
+iterativamente fino a che viene raggiunto un criterio di arresto come un certo
+numero di iterazioni, una soglia sull'errore o una soglia sul rateo di
+miglioramento. 
 
 All'utente viene lasciato il controllo di quelli che vengono detti iperparametri
 ovvero i parametri che controllano il funzionamento della rete neurale e che non
 vengono modificati durante l'apprendimento. Alcuni esempi sono la topologia del
-network neurale, la forma della funzione dei neuroni, la dimensione del passo di
+network neurale, la funzione di attivazione, la dimensione del passo di
 apprendimento eccetera.
+
+%Cost function
+%Gradiente
+%Backprop 
 
 \section{K-nearest neighbors}
 
 K-nearest neighbors è uno dei modelli più semplici tra quelli usati: invece che
 creare un modello interno del problema semplicemente memorizza i dati di
-training e per risolvere un nuovo problema calcola i k valori memorizzati più
-vicini e restituisce l'etichetta più popolare tra questi. La semplicità di
-questo approccio lo rende molto veloce, soprattutto nella fase di training, ma
-potrebbe non essere in grado di classificare un data set in cui la separazione
-tra le categorie è poco chiara.
+training, ovvero quelli usati durante allenamento, e per classificare una nuova
+istanza calcola quali sono i $K$ valori memorizzati più vicini e restituisce
+l'etichetta più frequente tra questi.
 
 Uno dei possibili problemi è la poca uniformità dei dati: se i valori più vicini
-selezionati sono molti distanti potrebbero non essere rilevanti per la
-classificazione, per questo è possibile introdurre un peso basato sulla distanza
-usato per calcolare l'etichetta più popolare. L'altro iperparametro su cui
-abbiamo controllo è K ovvero il numero di dati di training considerare per
-calcolare l'etichetta più probabile. La scelta corretta dipende dal tipo di dati
-che abbiamo, in particolare un valore maggiore di K sarà utile in un dataset con
-molto rumore ma produrrà una distinzione meno netta tra le categorie.
+selezionati sono molto distanti dal punto che stiamo cercando di classificare
+potrebbero non essere rilevanti per la classificazione, per ovviare a questo
+problema è possibile pesare il calcolo per l'etichetta con la distanza dei punti
+dando quindi meno importanza ai punti più distanti. Un importante iperparametro
+di cui abbiamo controllo è $K$ ovvero il numero di dati di training da
+considerare per calcolare l'etichetta più probabile. La scelta corretta dipende
+dal nostro dataset: in generale un valore maggiore di $K$ sarà utile per
+superare il rumore statistico dei nostri dati ma produrrà una distinzione meno
+netta tra le categorie.
+
+\newpage %La new page serve a posizionare correttamente le immagini successive
+
 
 \section{Macchine a vettori di supporto}
 
 L'obbiettivo di una macchina a vettori di supporto (SVM) è trovare un iperpiano
 che separi i dati di training nelle corrette categorie cercando di massimizzare
-il margine, ovvero la distanza tra l'iperpiano e i data point più vicini di
-ogni categoria.
+il margine, ovvero la distanza tra l'iperpiano e i dati più vicini di ogni
+categoria. Fatto questo per classificare un nuovo dato basterà vedere da che
+parte dell'iperpiano si trova.
 
-\includegraphics[scale=.7]{Immagini/SVM margine.png} \cite{Data science handbook}
-\\
+\begin{figure}[h]
+	\includegraphics[width =0.9\textwidth]{Immagini/SVM margine.png}
+	\caption{Esempio di iperpiano con i limiti del margine evidenziati \cite{Data science handbook}} 
+	
+\end{figure}
 
-Non è sempre possibile tracciare un iperpiano lineare per separare le categorie,
-a volte è necessario aggiungere una dimensione ai dati scalandoli secondo una
-funzione di kernel che ci permetta poi di tracciare l'iperpiano. Spesso anche
-utilizzando il kernel non esiste un margine netto tra le categorie e ci serve un
-modo di permettere un margine meno stringente in cui alcuni dati staranno
-all'interno del margine, la rigidità del margine è controllata da un parametro
-C, più grande è C più lasso sarà il margine.
+qè necessario trasformare i dati in uno spazio di dimensioni superiori secondo
+una funzione di kernel che ci permetta poi di tracciare l'iperpiano. 
+
+\begin{figure}[!h]
+	\caption{Esempio dati scalati con funzione kenrel}
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[width=0.9\linewidth]{Immagini/SVm non lineare.png}
+		\captionsetup{width=.8\linewidth }
+		\caption{Punti originali rappresentando con i colori le categorie, con
+			la linea solida il tentativo di tracciare un iperpiano e la linea
+			tratteggiata il relativo margine. \cite{Data science handbook}} 
+	\end{subfigure}
+	\begin{subfigure}{0.5\textwidth}
+		\includegraphics[width=0.9\linewidth]{Immagini/SVM kernel.png}
+		\captionsetup{width=.8\linewidth}
+		\caption{Punti scalati mantenendo uguali le coordinate x e y e
+			calcolando z secondo $e^{-(x^2 + y^2)} + 1$ \cite{Data science handbook}}
+	\end{subfigure}
+
+	
+\end{figure}
+
+Spesso però i dati reali non sono cosi nettamente separabili e avremmo una zona
+in cui dati di diverse categorie si sovrappongono. Per gestire al meglio questi
+casi il modello ha un iperparametro $C$ che consente di specificare il grado di
+rigidità del margine: con una $C$ molto grande avremmo una separazione molto
+netta in cui nessun punto si trova all'interno del margine, al contrario con
+una $C$ piccola permettiamo al modello di includere dei punti nel margine. $C$ è
+utile anche per evitare che il nostro vettore sia troppo influenzato dalla
+presenza di outlier: con un margine rigido l'iperpiano dovrà essere tracciato
+massimizzando la sua distanza dall'outlier mentre ammettendo che questo ricada
+all'interno del margine potremmo tracciare un iperpiano che massimizzi la distanza dai
+dati reali.
+
 
 \section{Alberi di decisione e foreste casuali}
 
-L'obbiettivo di questo approccio è costruire un albero di decisione ovvero una
-serie di decisioni basate sul valore di una caratteristica dei dati che ci porta
-a separare i dati nelle corrette categorie. Ogni decisione è quindi composta da
-una caratteristica e una soglia, per ogni decisione sceglieremo la soglia che
-minimizza un indice di eterogeneità, come l'entropia o l'indice di Gini, e che
-quindi separa il più possibile le caratteristiche.
+L'obbiettivo è costruire un albero di decisione ovvero un albero in cui a ogni
+nodo in base al valore di una caratteristica del dato il processo di
+classificazione procede lungo uno dei sotto alberi fino a arrivare a una foglia
+che stabilisce la categoria del dato.
 
-Un problema di questo approccio è che tende a fare overfitting soprattutto se
-aumentiamo la profondità dell'albero. Un modo di ovviare a questo problema è
-quello di usare le foreste casuali un classificatore che aggrega una serie di
-alberi di decisioni prendendo la classificazione più popolare tra questi.
-Vengono allenati più alberi di decisione con diversi sottoinsiemi del training
-set e la classificazione finale sarà ottenuta prendendo la più popolare tra i
-diversi alberi di decisione.
+Ogni decisione consiste quindi nel confrontare una caratteristica con un valore
+di soglia ed è quindi necessario scegliere un valore che al meglio separi i dati
+nelle corrette categorie. Per fare questo ci serviamo di un indice di
+eterogeneità statistica, come l'indice di Gini o l'entropia, scegliendo il
+valore della soglia che massimizza l'eterogeneità media delle categorie dei due
+sottoinsiemi di dati prodotti dalla decisione ovvero due gruppi tali che ognuno
+è il più vicino possibile a avere una sola categoria di dati.
+
+Un problema di questo approccio è che tende a fare overfitting ovvero creare un
+albero troppo adattato ai dati di training che poi non classifica correttamente
+i dati reali soprattutto aumentando troppo la profondità dell'albero. Per
+risolvere questo problema possiamo modificare i valori degli iperparametri come
+la profondità massima o il numero minimo di dati per foglia oppure possiamo
+usare un'altra tecnica: le foreste casuali. Le foreste casuali sono un
+classificatore che aggrega una serie di alberi di decisioni prendendo la
+classificazione più popolare tra questi. Per realizzarlo vengono allenati più
+alberi di decisione con diversi sottoinsiemi dei dati di training e la
+classificazione finale sarà ottenuta prendendo la classificazione più frequente
+tra i diversi alberi di decisione.
 
 \section{Naive Bayes}
 
 Naive Bayes si basa sull'applicazione del teorema di Bayes:
 $$
-P(y \mid x_1, \dots, x_n) = \frac{P(y) P(x_1, \dots, x_n \mid y)}
-                                 {P(x_1, \dots, x_n)}
+P(Y=y \mid X_1=x_1, \dots, X_n=x_n \mid Y=y) = \frac{P(Y=y) P(X_1=x_1, \dots, X_n=x_n \mid Y=y)}
+                                 						{P(X_1=x_1, \dots, X_n=x_n)}
 $$
-considerando $y$ come appartenere a una data categoria e $x_n$ come le
-caratteristiche dei nostri dati. Perché il teorema sia corretto è necessario che
-le $x_n$ siano tra loro indipendenti, questo non è sempre vero ma in problemi
-reali si può tipicamente assumerlo come vero e ottenere comunque buoni
-risultati. Possiamo stimare $P(y)$, $P(x_1, \dots, x_n \mid y)$ e
-$P(x_1, \dots, x_n)$ dal training set e quindi classificare i nuovi dati come la
-categoria a cui è più probabile che appartengono.
+
+dove $Y = y$ è l'evento che si verifica quando la categoria da predire è $y$ e
+per $i = 1, ..., n$, $X_i = x_i$ è l'evento che si verifica quando la i-esima
+caratteristica del dato da classificare assume il valore $x_i$. 
+
+% Una delle
+% ipotesi del teorema è  che le variabili $X_i \dots X_n$ siano tra loro indipendenti, questo non è
+% sempre vero ma in problemi reali si può tipicamente assumerlo come vero e
+% ottenere comunque buoni risultati.
+
+Possiamo stimare $P(y)$, $P(X_1 = x_1 \mid y), \dots, P(X_n = x_n \mid Y)$ e $P(x_1, \dots, x_n)$
+dalle frequenze del training set e quindi calcolare la probabilità che un dato
+appartenga a una categoria. Fatto questo basterà assegnargli la categoria a cui è
+più probabile che appartenga.
+
+Questo approccio si basa su due importanti assunzioni: la prima è che le
+variabili $X_i \dots X_n$ siano tra loro indipendenti, la seconda che la
+frequenza delle probabilità nel training set sia sufficientemente precisa nello
+stimare le probabilità reali. Seppure non abbiamo prova di queste assunzioni
+spesso con dati reali riusciamo a ottenere un buon stimatore anche se le ipotesi
+non sono del tutto vere.
 
 \section{K-means}
 
 K-means è l'unico algoritmo non supervisionato usato in questo progetto e si
 basa sul dividere il training set in K categorie scegliendo K punti detti
-baricentri e assegnando ogni punto alla categoria del baricentro più vicino. La
+baricentri e assegnando ogni dato alla categoria del baricentro più vicino. La
 posizione dei baricentri viene ottimizzata cercando di minimizzare la somma
 delle distanze quadratiche tra i dati del training set e il loro baricentro più
-vicino. 
+vicino.
+$$
+\sum_{i=0}^{n}\min_{\mu_j \in C}(||x_i - \mu_j||^2),
+$$
+
+dove $n$ è il numero di dati di training, $C$ è l'insieme dei baricentri,
+$\mu_j$ è quindi il j-esimo baricentro e $x_i$ è l'i-esimo dato.
 
 Essendo questo un algoritmo non supervisionato non è nota l'associazione tra
 baricentro e categoria reale e sarà quindi necessario ristabilire questa
 associazione ad esempio associando ogni baricentro alla categoria più presente
-nel suo insieme.
+nel suo insieme. Questa associazione non sarà sempre uno a uno infatti potrebbe
+essere vantaggioso avere più baricentri che categorie reali associando più
+baricentri alla stessa categoria.
 
 
 % 
@@ -265,11 +362,29 @@ nel suo insieme.
 \chapter{Il problema affrontato}
 \label{cap2}
 \section{Descrizione dei dati}
+I dati consistono in una serie di misurazioni fatte su dei reperti archeologici,
+le misurazioni consentono di sapere la composizione dei materiali 
+
 \section{Ambiente software}
+Python 3.7
+scikit-learn==0.21.3
+numpy==1.16.5
+pandas==0.25.1
+
 \section{Schema delle prove}
+
+
 \subsection{Repeated hold out}
+Per hold out si intende la tecnica di valutazione di un algoritmo basata sul
+separare i dati disponibili in un insieme di training e uno di testing. Il primo
+insieme verrà usato per allenare il modello, il secondo per valutarlo.
+Nonostante questo porti ad allenare il modello con meno dati 
+
 \subsection{Convalida incrociata}
+
+
 \subsection{Griglia di ricerca}
+
 
 
 % 
@@ -302,6 +417,9 @@ http://www.dkriesel.com, 2007. %Seguendo "how to cite" sul sito
 \bibitem{Data science handbook}
 Jake VanderPlas, Python Data Science Handbook, O'Reilly Media, aviable at
 https://jakevdp.github.io/PythonDataScienceHandbook/, 2016
+
+\bibitem{scikit} %TODO: fare bene la citazione
+https://scikit-learn.org
 
 
 \end{thebibliography}

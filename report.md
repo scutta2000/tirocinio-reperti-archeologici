@@ -1,24 +1,31 @@
 # Report
 
-* Test iniziale con valori di default di scikit-learn, risultato inaspettatamente buono: accuratezza ~97%
+* Test iniziale con valori di default di scikit-learn, risultato
+  inaspettatamente buono: accuratezza ~97%
 
 * Test meta parametri per MLPClassifier
 
-* Grid search da risultati variabili da run a run quindi l'ho eseguito piu` volte analizzando i risultati ottenuti
+* Grid search da risultati variabili da run a run quindi l'ho eseguito piu`
+  volte analizzando i risultati ottenuti
 
-* Nested cross validation per valutare il modello separando correttamente traing e testing set
+* Nested cross validation per valutare il modello separando correttamente traing
+  e testing set
 
-* Test iniziale di learning non supervisionato per il dataset non classificato, risultati promettenti
+* Test iniziale di learning non supervisionato per il dataset non classificato,
+  risultati promettenti
 
-* Confronto con nested CV di vari tecniche di classificazione supervisionata, risultati buoni soprattuto per `naive bayes`
+* Confronto con nested CV di vari tecniche di classificazione supervisionata,
+  risultati buoni soprattuto per `naive bayes`
 
 * test nn con 2 hidden layer, risultati sostanzialmente uguali
 
-* i modelli non supervisionati funzionano rimuovendo dal database le ripetizioni ma meno bene (sia per accuratezza che sensibilità/)
+* i modelli non supervisionati funzionano rimuovendo dal database le ripetizioni
+  ma meno bene (sia per accuratezza che sensibilità/)
 
-* valutazione della classificazione del database non classificato mostra una buona consitenza intra modello ma non buona inter modello
+* valutazione della classificazione del database non classificato mostra una
+  buona consistenza intra modello ma non buona inter modello
 
-* Il training senza ripetizioni mostra buoni risulati valutando con le ripetizioni ma non buone valutando con i singoli
+* Il training senza ripetizioni mostra buoni risultati valutando con le ripetizioni ma non buone valutando con i singoli
 
 
 

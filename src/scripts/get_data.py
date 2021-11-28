@@ -24,10 +24,10 @@ def ceramiche_no_ripetizioni_DB(ripetizioni=False):
     path = Path(__file__).parent.parent / \
         'dati_ceramiche_classi_no_ripetizioni.xlsx'
     tarquina = pd.read_excel(path, index_col=0, usecols=[
-                             0, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+                             0, 2, 3, 4, 5, 6, 7, 8, 9, 10], engine="openpyxl")
 
     non_tarquina = pd.read_excel(path, index_col=0, usecols=[
-                                 0, 2, 3, 4, 5, 6, 7, 8, 9, 10], sheet_name=1)
+                                 0, 2, 3, 4, 5, 6, 7, 8, 9, 10], sheet_name=1, engine="openpyxl")
     if not ripetizioni:
         X = pd.concat([tarquina, non_tarquina])
         y = [1]*len(tarquina) + [0]*len(non_tarquina)

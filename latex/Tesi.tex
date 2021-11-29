@@ -436,127 +436,158 @@ bontà della soluzione trovata.
 \chapter{Il problema affrontato}
 \label{cap2}
 \section{Descrizione dei dati}
-I dati consistono in una serie di misurazioni fatte su reperti archeologici. Per
-ognuno di questi reperti sono state fate più misurazioni in punti diversi e
-ognuna di questi ci dice la composizione dell'oggetto ovvero le percentuali di
-potassio, calcio, titanio, cromio, manganese, ferro e zinco presente in quel
-punto dell'reperto normalizzate in modo che la loro somma arrivi al 100\%
-ottenendo così dati con sette caratteristiche. 
+Su una serie di reperti archeologici sono state effettuate diverse misure della
+composizione chimica. In vari punti di ciascun reperto sono state individuate le
+percentuali di potassio, calcio, titanio, cromo, manganese, ferro e zinco. La
+somma delle percentuali degli elementi chimici citati, pur non costituendo la
+totalità del materiale componente i reperti, è stata normalizzata affinché la
+loro somma facesse 100\%. Abbiamo così ottenuto una serie di dati con sette
+caratteristiche che costituiscono le istanze del nostro problema.
+
+% I dati consistono in una serie di misurazioni fatte su reperti archeologici. Per
+% ognuno di questi reperti sono state fatte più misurazioni in punti diversi e
+% ognuna di queste ci dice la composizione dell'oggetto ovvero le percentuali di
+% potassio, calcio, titanio, cromo, manganese, ferro e zinco presente in quel
+% punto dell'reperto normalizzate in modo che la loro somma arrivi al 100\%
+% ottenendo così dati con sette caratteristiche. 
 
 Di una parte di questi reperti conosciamo l'origine ovvero sappiamo se il
-reperto è originario di tarquinia, luogo dove è stato ritrovato, o meno. Al
-contrario per altri reperti questa informazione è sconosciuta e il nostro
-obbiettivo è proprio di riuscire a trovarla.
+reperto è originario di Tarquinia, luogo dove tutti sono stati ritrovati, o se
+la vera origine è un altra. Al contrario per altri reperti questa informazione è
+sconosciuta e il nostro obbiettivo è riuscire a trovarla.
 
-In totale abbiamo 33 reperti con l'origine conosciuta, 24 dei quali di tarquinia
-e 9 non, per un totale di 114 misurazioni. I reperti con origine sconosciuta
-sono invece 78 con 132 misurazioni.
+In totale abbiamo 33 reperti con origine conosciuta, 24 dei quali di Tarquinia e
+9 con origine diversa. Sui reperti di origine nota, sono state effettuate varie
+misurazioni per un totale di 114. I reperti con origine sconosciuta sono 78,
+sui quali sono state eseguite 132 misurazioni.
 
 \section{Ambiente software}
-Il progetto è stato svolto in python e tramite la libreria scikit-learn. Il
-codice in se è scritto all'interno di notebook jupyter: dei file che consento di
-scrivere celle di codice eseguibili singolarmente dividendo il programma in
-passi più facilmente modificabili e rendendo più facile visualizzare cosa sta
-facendo il programma. La libreria principale a cui gira attorno il progetto è
-scikit-learn una libreria che contiene una serie di algoritmi di machine
-learning oltre che alcune funzionalità di supporto all'utilizzo di questi
-algoritmi. Tutti gli algoritmi descritti nel capitolo uno sono stati utilizzati
-tramite funzioni fornite da scikit-learn così come le tecniche di testing che
+Per il progetto è stato è stato utilizzato il linguaggio di programmazione
+Python utilizzando la libreria Scikit-Learn. Il codice di programmazione è stato
+scritto all'interno di notebook jupyter, cioè file che consentono di scrivere
+celle di codice eseguibili singolarmente, dividendo il programma in passi più
+facilmente modificabili e rendendo più agevole visualizzare cosa stia facendo il
+programma. La libreria principale su cui si basa il progetto è, come detto,
+Scikit-Learn, che contiene una serie di algoritmi di machine
+learning oltre ad alcune funzionalità di supporto all'utilizzo di questi
+algoritmi. Gli algoritmi descritti nel primo capitolo sono stati utilizzati
+grazie a funzionalità presenti in Scikit-Learn così come le tecniche di testing che
 vedremo nelle prossime sezioni. 
 
-Sono poi state usate altre librerie in minor modo come pandas per la lettura e
-scrittura di file excel, matplotlib per la creazione di alcuni grafici e joblib
-per salvare i modelli allenati su disco. Il codice non dovrebbe richiedere una
-versione specifica di python o di queste libreria ma per l'utilizzo dei modelli
-salvati è necessario che python sia alla versione 3.7 e le librerie nelle
-versioni specificate nel file requirements.txt.
+Oltre alla libreria Scikit-Learn per la realizzazione del progetto sono state
+usate altre librerie, anche se in modo minore, come Pandas per la lettura e
+scrittura di file Excel, Matplotlib per la creazione di alcuni grafici e Joblib
+per salvare i modelli allenati su disco. Per eseguire il codice non sarebbe
+necessaria una specifica versione di Python e delle altre librerie, tuttavia per
+poter utilizzare i modelli già allenati, invece che rieseguire il processo di
+allenamento, è necessario usare la versione 3.7 di Python e le versioni
+specificate nel file requirements.txt per le librerie.
+
 
 \section{Repeated holdout}
-Per holdout si intende la tecnica di valutazione di un algoritmo basata sul
-separare i dati disponibili in un insieme di training e uno di testing. Il primo
-insieme verrà usato per allenare il modello, il secondo per valutarlo.
+Per holdout si intende la tecnica di valutazione di un algoritmo basata sulla
+separazione dei dati disponibili in un insieme di training e uno di testing. Il
+primo insieme verrà usato per allenare il modello, il secondo per valutarlo.
 
-Nonostante questa tecnica ci porti ad allenare il modello con meno dati avere
-dei dati che il modello non hai mai visto ci permette di valutarlo più
-accuratamente. Una parte importante della creazione di un modello è infatti la
-sua valutazione: ci serve un modo per sapere se il modello creato funziona come
-vorremmo e se l'algoritmo usato e gli iperparametri scelti sono adatti al nostro
-problema.
+Idealmente vorremmo utilizzare tutti di dati disponibili durante l'allenamento e
+allo stesso tempo avere una misura precisa della prestazioni del modello. Questo
+non è possibile perché misurare le prestazione del modello con dati che questo
+ha usato durante l'allenamento falsa i risultati inducendo a pensare che il
+modello sia affidabile di quanto lo sia in realtà.
 
-Per repeated holdout non si intende altro che la ripetizione dell'hold out: a
+Quindi per quanto questa tecnica ci porti ad avere un numero minore di dati
+disponibili per l'allenamento ci consente di misurare più accuratamente le
+prestazioni del modello. Una parte importante della creazione di un modello è
+infatti la sua valutazione: ci serve un modo per sapere se il modello creato
+funziona come vorremmo e se l'algoritmo utilizzato insieme agli iperparametri
+scelti, sono adatti al nostro problema.
+
+Per repeated holdout non si intende altro che la ripetizione dell'holdout,
+utilizzando tutti i dati disponibili ma divisi ogni volta in modo diverso: a
 ogni iterazione vengono randomizzati l'insieme di training e quello di testing e
-viene ripetuto l'allenamento e la valutazione. La speranza è che facendo più
-prove sempre con dati leggermente diversi riusciamo meglio a prevedere la
-prestazione in tutte le istanze possibili del problema.
+vengono ripetuti l'allenamento e la valutazione. Facendo più prove sempre con
+dati leggermente diversi si riesce meglio a prevedere la prestazione in tutte le
+istanze possibili del problema.
 
-Nel progetto questa tecnica è stata usata solamente durante il test iniziale
-fatto con una rete neurale come studio di fattibilità. Infatti questa tecnica
-richiede di perdere una buona percentuale dei dati durante l'allenamento per
-questo nel resto del progetto abbiamo quasi esclusivamente usato la convalida
-incrociata: una tecnica che consente di ottenere una buona valutazione del
-modello senza sacrificare una così grande percentuale di dati. Nella prossima
-sezione spiegherò in più dettaglio come questo è possibile.
+Malgrado quanto detto sopra che indica la bontà della tecnica di holdout, el
+progetto è stata utilizzata solamente all'interno dello studio di fattibilità,
+il test iniziale. Il tentativo fatto con il presente studio è quello di
+migliorare la qualità del modello aumentando la quantità di dati usati
+durante l'allenamento pur mantenendo una buona qualità di analisi delle
+prestazioni. Questo è possibile grazie a una diversa tecnica: la convalida
+incrociata che verrà meglio spiegata nella prossima sezione.
+
+% l'attendibilità dei risultati, utilizzando il maggior numero di dati
+% possibili durante l-allenamento Infatti questa tecnica richiede di perdere una buona
+% percentuale dei dati durante l'allenamento per questo nel resto del progetto
+% abbiamo quasi esclusivamente usato la convalida incrociata: una tecnica che
+% consente di ottenere una buona valutazione del modello senza sacrificare una
+% così grande percentuale di dati. Nella prossima sezione spiegherò in più
+% dettaglio come questo è possibile.
 
 \section{Convalida incrociata}
 
-Una popolare alternativa all'holdout è la convalida incrociata: si dividono i
-dati in $K$ sezioni a questo punto si fanno $K$ prove, ognuna delle quali
-utilizzerà una diversa delle $K$ sezioni come test set e le rimanenti come
-insieme di training. Questo ci permette di usare una più alta percentuali di
-dati per allenare il modello rispetto all'holdout e riuscire comunque a fare
-buone misurazioni, ad esempio in questo progetto abbiamo principalmente usato
-$K=5$ utilizzando quindi l'80\% dei dati per il training ad ogni prova. Questo
-viene al costo di un maggior costo computazionale rispetto all'holdout infatti
-dovremmo riallenare il modello $K$ volte e questo richiede tempo ma con un
-database relativamente semplice come il nostro ne vale la pena.
-
-% Questo è stato il principale metodo di valutazione usato in questo progetto.
+Una valida alternativa all'holdout è la convalida incrociata: si dividono i dati
+in $n$ sezioni contenenti lo stesso numero di dati con cui svolgere $n$ prove.
+Ogni prova utilizzerà una diversa delle $n$ sezioni come test set e le rimanenti
+$n-1$ come insieme di training. Questo ci permette di usare una più alta
+percentuali di dati per allenare il modello rispetto all'holdout e riuscire
+comunque a fare buone misurazioni. Ad esempio in questo progetto abbiamo usato
+$n=5$ sezioni, utilizzando quindi l'80\% dei dati per il training ad ogni prova,
+un quantitativo di molto superiore a quello possibile con la tecnica di holdout.
+Questi benefici rispetto all'holdout vengono al costo di una maggiore
+complessità computazionale: infatti dovremmo riallenare il modello $n$
+volte e questo richiede tempo, con un database relativamente semplice come il
+nostro il beneficio giustifica il costo.
 
 \section{Griglia di ricerca}
-Come abbiamo visto nel primo capitolo tutti i modelli usati hanno una serie di
-iperparametri da definire ma come facciamo a sapere quali sono i valori
-migliori? Un buon metodo è usare una griglia di ricerca: scegliamo una serie di
-valori candidati per ogni iperparametro e non facciamo altro che provare ogni
-possibile combinazione di questi allenando e valutando il modello in ogni
-possibile configurazione. Per la valutazione utilizziamo la convalida incrociata
-per i motivi spiegati nella sezione precedente. Questo ci permette di misurare
-le prestazioni del modello con ogni valore degli iperparametri e possiamo
-selezionare quelli che mostrano i risultati migliori.
+Come abbiamo visto nel primo capitolo, tutti i modelli usati hanno una serie di
+iperparametri da definire. Come facciamo a sapere quali sono i valori migliori?
+Un buon metodo è usare una griglia di ricerca: scegliamo una serie di valori
+candidati per ogni iperparametro e proviamo tutte le combinazione di questi
+allenando e valutando il modello in ogni possibile configurazione. Per la
+valutazione utilizziamo la convalida incrociata per i motivi spiegati nella
+sezione precedente. Questo ci permette di misurare le prestazioni del modello
+con ogni valore degli iperparametri e possiamo selezionare quelli che mostrano i
+risultati migliori.
 
 \section{Schema delle prove}
 Inizialmente la prima prova fatta è stata quella di eseguire semplicemente il
-modello di rete neurale di scikit-learn {\it "MPLClassifier"} e una macchina a
+modello di rete neurale di Scikit-Learn {\it "MPLClassifier"} e una macchina a
 vettori di supporto {\it "SVC"}. I due algoritmi sono stati eseguiti
-semplicemente con i parametri di default e senza separare i dati di training e
-di testing ma il test è stato sufficiente per capire che il problema era
-affrontabile: gia senza modificare gli iperparametri abbiamo ottenuto oltre il
-95\% di accuratezza, un ottimo risultato anche tenendo conto dei risultati
-esagerati dall'unione di test e training set.
+semplicemente con i parametri di default provvisti dalla libreria e senza
+separare i dati di training e di testing. Senza modificare gli iperparametri
+abbiamo ottenuto oltre il 95\% di accuratezza. Nonostante questa misura sia resa
+troppo ottimista dalla mancata separazione del dai dati di test da quelli di
+training, il risultato rimane buono e sufficiente per capire che il problema è
+affrontabile
 
-Il prossimo passo è stato quello di cercare di ottimizzare gli iperparametri
+Il passo successivo è stato quello di cercare di ottimizzare gli iperparametri
 della rete neurale usando una griglia di ricerca. I due parametri che abbiamo
 fatto variare sono il numero di neuroni nello strato nascosto e la funzione di
 attivazione. Per lo strato nascosto abbiamo provato sia con un singolo strato
-contenente tra i due e i venti neuroni sia con due strati ognuno con fino a 9
-neuroni. Mentre per la funzione di attivazione abbiamo provato la funzione
+contenente tra i due e i venti neuroni sia con due strati contenenti ognuno fino
+a 9 neuroni. Mentre per la funzione di attivazione abbiamo provato la funzione
 identità ($f(x) = x$), la funzione sigmoidea ($f(x) = \frac{1}{1 + e^{-x}}$), la
 funzione tangente iperbolica ($f(x)=\tanh(x) = \frac {e^x - e^{-x}} {e^x +
-e^{-x}}$) e la funzione relu ($f(x) = max(0, x)$). In diverse esecuzioni della
-griglia di ricerca diverse configurazioni dei parametri risultavano migliori.
-Abbiamo provato a eseguire più volte la prova osservando la frequenza con cui un
-certo iperparametro risultava il migliore o la media dell'accuratezza raggiunta
-dallo stesso ma anche così nessuna configurazione spiccava come migliore sulle
-altre. Visti i risultati non proveremo più molteplici strati nascosti dato che
-non sembrano migliorare il risultato e aggiungono molti casi da tesare nella
-griglia di ricerca aumentando significativamente il tempo di calcolo.
+e^{-x}}$) e la funzione relu ($f(x) = max(0, x)$). Eseguendo più volte
+l'esperimento ci siamo resi conto che gli iperparametri che producevano il
+miglior modello variavano tra un esecuzione e l'altra. Abbiamo provato a
+eseguire più volte la prova osservando la frequenza con cui un certo
+iperparametro risultava il migliore o la media dell'accuratezza raggiunta dallo
+stesso ma anche così nessuna configurazione spiccava come migliore sulle altre.
+Dato che aggiungere più strati nascosti alla rete neurale non sembra produrre un
+modello significativamente migliore, nelle prove successive abbiamo scelto di
+non testare nuovamente questa configurazione in quanto avrebbe aumentato
+significativamente il tempo di calcolo.
 
-Abbiamo poi proceduto a sperimentare con gli altri modelli. Per ogni
-modello abbiamo selezionato gli iperparametri più importanti da testare creando
-una griglia di ricerca per ognuno. Fatto questo abbiamo per ognuno eseguito una
-convalidazione incrociata testando a ognuna delle $K$ prove tutti i parametri
+Abbiamo poi proceduto a sperimentare gli altri modelli. Per ogni modello abbiamo
+selezionato gli iperparametri più importanti da testare creando una griglia di
+ricerca per ognuno. Fatto questo per ognuno di essi abbiamo eseguito una
+convalidazione incrociata testando a ognuna delle $n$ prove tutti i parametri
 della griglia di ricerca e valutando il modello migliore per accuratezza,
-sensibilità e specificità. Questo ci ha permesso di confrontare i vari modelli al
-di là di una particolare configurazione di parametri ottenendo i risultati
+sensibilità e specificità. Questo ci ha permesso di confrontare i vari modelli
+al di là di una particolare configurazione di parametri, ottenendo i risultati
 consultabili nella prima tabella.
 
 
@@ -630,26 +661,24 @@ consultabili nella prima tabella.
 \end{table}
 
 
-%TODO: trovare il modo di mettere i dati delle performance dei modelli
-
 Come discusso nella descrizione dei dati il nostro database è composto da più
-misurazioni dello stesso dato. Fino ad adesso abbiamo trattato ogni dato come
-un valore singolo e separato dagli altri ma in realtà questo potrebbe rivelarsi
-un problema: se i dati sono troppo simili tra loro i modelli potrebbero
-adattarsi troppo ai dati di training producendo quindi buoni risultai durante
-l'allenamento ma rivelandosi poi essere poco buono con i dati reali trovandosi
-quindi in una situazione detta overfitting. Per verificare che questo non stesse
-avvenendo abbiamo separato i dati selezionando per ogni reperto una misurazione
-e utilizzando l'insieme così creato per allenare i modelli mentre il resto delle
+misurazioni dello stesso dato. Fino ad adesso abbiamo trattato ogni dato come un
+valore singolo e separato dagli altri ma in realtà questo potrebbe rivelarsi un
+problema: se i dati sono troppo simili tra loro i modelli potrebbero adattarsi
+troppo ai dati di training producendo quindi buoni risultai durante
+l'allenamento ma rivelandosi poco efficaci con i dati reali trovandosi quindi in
+una situazione detta overfitting. Per verificare che questo non stesse avvenendo
+abbiamo separato i dati selezionando per ogni reperto una misurazione e
+utilizzando l'insieme così creato per allenare i modelli mentre il resto delle
 misurazioni è stato usato per il testing. Abbiamo poi utilizzato questo insieme
-di training per riallenare i modelli utilizzando la stessa griglia di ricerca
-usata nell'esperimento precedente per selezionare gli iperparametri testando poi
-i modelli con i rimanenti dati. Osservando i risultati osserviamo che
-l'accuratezza di quasi tutti i modelli è di poco calata suggerendo quindi che
-l'overfitting non è un problema e anzi eliminando le ripetizioni riduciamo di
-molto i dati usabili nel training peggiorando quindi i modelli risultati.
+di training per riallenare i modelli, utilizzando la stessa griglia di ricerca
+usata nell'esperimento precedente, per selezionare gli iperparametri e testare
+poi i modelli con i rimanenti dati. Osservando i risultati possiamo notare che
+l'accuratezza di quasi tutti i modelli è di poco calata rispetto all'esperimento
+della tabella precedente, suggerendo quindi che l'overfitting non sia un
+problema. Al contrario eliminando le ripetizioni riduciamo di molto i dati
+usabili nel training peggiorando quindi i modelli risultanti.
 
-%TOOD: dati della performance modelli senza ripetizioni
 \begin{table}
 \caption{Risultati dell'esperimento per confrontare i vari modelli}
 \rule{\textwidth}{0.25mm}
@@ -737,6 +766,8 @@ Specificità &    1.0  \\ \hline
 \label{cap3}
 \section{Valutazione combinata}
 
+
+
 % 
 % 
 %			CAPITOLO 4: Conclusioni
@@ -754,9 +785,7 @@ Specificità &    1.0  \\ \hline
 \bibitem{Intro to nn}
 D. Kriesel, A brief introduction to neural networks, disponible su
 http://www.dkriesel.com, 2007. %Seguendo "how to cite" sul sito
-%
 
-% https://towardsdatascience.com/support-vector-machine-introduction-to-machine-learning-algorithms-934a444fca47
 \bibitem{Data science handbook}
 Jake VanderPlas, Python Data Science Handbook, O'Reilly Media, disponibile su
 https://jakevdp.github.io/PythonDataScienceHandbook/, 2016
